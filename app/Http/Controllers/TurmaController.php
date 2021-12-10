@@ -123,7 +123,7 @@ class TurmaController extends Controller
     {
         $data = request();
         $turma = Turma::where(['id' => $data->input('id')])->first();
-        $turma->turma = $data->input('turma');
+        $turma->titulo = $data->input('titulo');
         $turma->sala = $data->input('sala');
         $turma->save();
 
@@ -138,6 +138,27 @@ class TurmaController extends Controller
         $aluno->nome = $data->input('nome');
         $aluno->idade = $data->input('idade');
         $aluno->dt_nascimento = $data->input('dt_nascimento');
+        $aluno->save();
+        return redirect()->to(url(env('FRONTEND_URL') . '/auth/autenticado.php'));
+    }
+
+    public function editarProfessor()
+    {
+        $data = request();
+
+        $aluno = Professor::where(['id' => $data->input('id')])->first();
+        $aluno->nome = $data->input('nome');
+        $aluno->titulacao = $data->input('titulacao');
+        $aluno->save();
+        return redirect()->to(url(env('FRONTEND_URL') . '/auth/autenticado.php'));
+    }
+
+    public function editarDisciplina()
+    {
+        $data = request();
+
+        $aluno = Disciplina::where(['id' => $data->input('id')])->first();
+        $aluno->titulo = $data->input('titulo');
         $aluno->save();
         return redirect()->to(url(env('FRONTEND_URL') . '/auth/autenticado.php'));
     }
