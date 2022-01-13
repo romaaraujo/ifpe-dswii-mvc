@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>MinhasContas - Histórico</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+        integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+    <!-- Custom styles for this template -->
+    <link href="css/website.css" rel="stylesheet">
+</head>
+
+<body class="text-center">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="./historico.html">Início <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="./bancos.html">Bancos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="./formas-pagamento.html">Formas de Pagamento</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link font-bold" onclick="sair()">SAIR</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <h1 class="h3 mb-3 font-weight-normal">MinhasContas - Histórico</h1>
+        <div class="d-flex justify-content-between mb-3">
+            <button class="btn btn-success" data-toggle="modal" data-target="#modalAdicionarConta">Adicionar</button>
+            <h3>Saldo: <span class="saldo">...</span></h3>
+        </div>
+        <div class="spinner-grow historico-load" style="display: none;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+        <div class="container border rounded bg-dark p-3">
+            <table class="table">
+                <thead class="bg-success text-white">
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Valor</th>
+                        <th>Forma de Pagamento</th>
+                        <th>Banco</th>
+                        <th>Data</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody class="tabela-historico">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="modal fade" id="modalAdicionarConta" tabindex="-1" role="dialog"
+        aria-labelledby="modalAdicionarContaTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Nova Movimentação</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <input type="number" step="0.1" class="form-control mb-2 nova-conta-valor" placeholder="Valor">
+                        <select class="form-control mb-2 nova-conta-tipo">
+                            <option value="ENTRADA">ENTRADA</option>
+                            <option value="SAIDA">SAÍDA</option>
+                        </select>
+                        <select class="form-control mb-2 nova-conta-banco"></select>
+                        <select class="form-control mb-2 nova-conta-forma-pagamento"></select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary" onclick="adicionarConta($(this))">Adicionar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalEditarConta" tabindex="-1" role="dialog"
+        aria-labelledby="modalEditarContaTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Editar Movimentação</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <input type="number" step="0.1" class="form-control mb-2 editar-conta-valor" placeholder="Valor">
+                        <select class="form-control mb-2 editar-conta-tipo">
+                            <option value="ENTRADA">ENTRADA</option>
+                            <option value="SAIDA">SAÍDA</option>
+                        </select>
+                        <input class="form-control mb-2 editar-conta-banco" disabled></input>
+                        <input class="form-control mb-2 editar-conta-forma-pagamento" disabled></input>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary btn-editar-conta" id="0" onclick="editarConta($(this))">Editar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+<script src="js/historico.js"></script>
+
+</html>
